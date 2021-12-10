@@ -1,63 +1,53 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import type { NextPage } from 'next';
+import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import Link from 'next/link';
 
-import Counter from '../features/counter/Counter'
-import styles from '../styles/Home.module.css'
+import { useAppSelector } from '@/app/hooks';
+import Footer from '@/components/Footer';
+import LoginButtons from '@/components/LoginButtons';
+import Page from '@/components/Layouts/PageLayout';
+import { selectIsLoggedIn } from '@/features/authSlice';
+import { LogoIcon } from '@/styles/icons/icons';
 
-const IndexPage: NextPage = () => {
+const HomePage: NextPage = () => {
+  const isLoggedIn = useAppSelector(selectIsLoggedIn);
+
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Redux Toolkit</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <header className={styles.header}>
-        <img src="/logo.svg" className={styles.logo} alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className={styles.link}
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className={styles.link}
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className={styles.link}
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className={styles.link}
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  )
-}
+    <Page path="/">
+      <Box bg="gray.100" py={16} px={4}>
+        <Flex as="main" direction="column" maxW="700px" margin="0 auto">
+          <LogoIcon color="black" mb={2} />
+          <Text mb={4} fontSize="lg" py={4}>
+            Onmylist is the easiest way to create list of movies, books, places and share them with
+            others.
+          </Text>
 
-export default IndexPage
+          {isLoggedIn ? (
+            <Link href="/lists" passHref>
+              <Button
+                as="a"
+                backgroundColor="gray.900"
+                color="white"
+                fontWeight="medium"
+                mt={4}
+                maxW="200px"
+                _hover={{ bg: 'gray.700' }}
+                _active={{
+                  bg: 'gray.800',
+                  transform: 'scale(0.95)',
+                }}
+              >
+                View my lists
+              </Button>
+            </Link>
+          ) : (
+            <LoginButtons />
+          )}
+        </Flex>
+      </Box>
+      <Footer />
+    </Page>
+  );
+};
+
+export default HomePage;
